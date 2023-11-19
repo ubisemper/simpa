@@ -72,8 +72,19 @@ class VesselStructure(GeometricalStructure):
                 vessel_branch_positions1 = position
                 vessel_branch_positions2 = position
                 angles = np.random.normal(np.pi / 16, np.pi / 8, 3)
-                vessel_branch_directions1 = torch.tensor(np.matmul(rotation(angles), direction)).to(self.torch_device)
-                vessel_branch_directions2 = torch.tensor(np.matmul(rotation(-angles), direction)).to(self.torch_device)
+
+                dir = direction.to(self.torch_device)
+                rota = torch.tensor(rotation(angles)).to(self.torch_device)
+                vessel_step_1 = torch.matmul(rota, dir)
+                vessel_step_2 = torch.tensor(vessel_step_1)
+                vessel_branch_directions1 = vessel_step_2.to(self.torch_device)
+
+                dir2 = direction.to(self.torch_device)
+                rota2 = torch.tensor(rotation(-angles)).to(self.torch_device)
+                vessel2_step_1 = torch.matmul(rota2, dir2)
+                vessel2_step_2 = torch.tensor(vessel2_step_1)
+                vessel_branch_directions2 = vessel2_step_2.to(self.torch_device)
+
                 vessel_branch_radius1 = 1 / math.sqrt(2) * radius
                 vessel_branch_radius2 = 1 / math.sqrt(2) * radius
                 vessel_branch_radius_variation1 = 1 / math.sqrt(2) * radius_variation
