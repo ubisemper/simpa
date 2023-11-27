@@ -25,11 +25,11 @@ class PathManager:
 
     def __init__(self, environment_path=None):
         """
-
         :param environment_path: Per default, the config with the environment variables is located in /HOME/path_config.env
         """
         self.logger = Logger()
         self.path_config_file_name = 'path_config.env'
+        self.custom_save_path = None
         if environment_path is None:
             environment_path = os.path.join(str(Path.home()), self.path_config_file_name)
             self.logger.debug(f"Using $HOME$ path to search for config file: {environment_path}")
@@ -76,10 +76,19 @@ class PathManager:
 
         return None
 
+    def set_custom_save_path(self, save_path):
+        self.logger.debug(f"Custom save path is set PATH={save_path}")
+        self.custom_save_path = save_path
+
     def get_hdf5_file_save_path(self):
-        path = self.get_path_from_environment('SAVE_PATH')
-        self.logger.debug(f"Retrieved SAVE_PATH={path}")
-        return path
+        if self.custom_save_path:
+            path = self.custom_save_path
+            self.logger.debug(f"Retrieved custom save path: {path}")
+            return path
+        else:
+            path = self.get_path_from_environment('SAVE_PATH')
+            self.logger.debug(f"Retrieved SAVE_PATH={path}")
+            return path
 
     def get_mcx_binary_path(self):
         path = self.get_path_from_environment('MCX_BINARY_PATH')
