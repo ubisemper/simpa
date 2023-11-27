@@ -21,7 +21,7 @@ def calculate_oxygenation(molecule_list):
             hbO2 = molecule.volume_fraction
 
     if hb is None and hbO2 is None:
-        return None
+        return -1
 
     if hb is None:
         hb = 0

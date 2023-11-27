@@ -42,6 +42,11 @@ def assert_array_well_defined(array: np.ndarray, assume_non_negativity: bool = F
     :raises AssertionError: if there are any unexpected values in the given array.
     """
 
+    try:
+        array = array.cpu().numpy()
+    except:
+        pass
+
     error_message = None
     if not np.isfinite(array).all():
         error_message = "nan, inf or -inf"
