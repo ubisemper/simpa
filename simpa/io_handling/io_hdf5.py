@@ -35,6 +35,12 @@ def save_hdf5(save_item, file_path: str, file_dictionary_path: str = "/", file_c
 
         for key, item in data_dictionary.items():
             key = str(key)
+
+            try:
+                item = item.cpu()
+            except:
+                pass
+
             if isinstance(item, SerializableSIMPAClass):
                 serialized_item = item.serialize()
 
